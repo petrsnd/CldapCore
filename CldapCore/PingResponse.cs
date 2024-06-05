@@ -27,6 +27,10 @@
             ClientSiteName = strings[7];
         }
 
+        /// <summary>
+        /// Returns summary information about a CLDAP ping response.
+        /// </summary>
+        /// <returns>A string containing a summary of ping response properties.</returns>
         public override string ToString()
         {
             var stringBuilder = new StringBuilder();
@@ -53,7 +57,9 @@
         public string DcSiteName { get; set; }
         public string ClientSiteName { get; set; }
 
-        // Server Properties
+        /// <summary>
+        /// A string representation of all CLDAP ping response flags.
+        /// </summary>
         public string Flags
         {
             get
@@ -73,45 +79,82 @@
                 return string.Join(" ", strings);
             }
         }
+        /// <summary>
+        /// The server holds the PDC FSMO role (PdcEmulationMasterRole).
+        /// </summary>
+        public bool IsPrimaryDomainController => CheckFlag(DS_FLAG.DS_PDC_FLAG);
+        /// <summary>
+        /// The server is a global catalog (GC) server and will accept and process GC messages.
+        /// </summary>
+        public bool IsGlobalCatalog => CheckFlag(DS_FLAG.DS_GC_FLAG);
+        /// <summary>
+        /// The server is an LDAP server.
+        /// </summary>
+        public bool IsLdapServer => CheckFlag(DS_FLAG.DS_LDAP_FLAG);
+        /// <summary>
+        /// The server is a domain controller (DC).
+        /// </summary>
+        public bool IsDomainController => CheckFlag(DS_FLAG.DS_DS_FLAG);
+        /// <summary>
+        /// The server is running the Kerberos Key Distribution Center service.
+        /// </summary>
+        public bool IsKeyDistributionCenter => CheckFlag(DS_FLAG.DS_KDC_FLAG);
+        /// <summary>
+        /// The Win32 Time Service, as specified in [MS-W32T], is present on the server.
+        /// </summary>
+        public bool IsTimeServer => CheckFlag(DS_FLAG.DS_TIMESERV_FLAG);
+        /// <summary>
+        /// The server is in the same site as the client.
+        /// </summary>
+        public bool IsInClientSite => CheckFlag(DS_FLAG.DS_CLOSEST_FLAG);
+        /// <summary>
+        /// Indicates that the server is not a read-only domain controller (RODC).
+        /// </summary>
+        public bool IsWritable => CheckFlag(DS_FLAG.DS_WRITABLE_FLAG);
+        /// <summary>
+        /// The server is a reliable time server.
+        /// </summary>
+        public bool IsGoodTimeServer => CheckFlag(DS_FLAG.DS_GOOD_TIMESERV_FLAG);
+        /// <summary>
+        /// The naming context is an application naming context.
+        /// </summary>
+        public bool IsApplicationNamingContext => CheckFlag(DS_FLAG.DS_NDNC_FLAG);
+        /// <summary>
+        /// The server is a read-only domain controller (RODC).
+        /// </summary>
+        public bool IsReadOnly => CheckFlag(DS_FLAG.DS_SELECT_SECRET_DOMAIN_6_FLAG);
+        /// <summary>
+        /// The Active Directory Web Service, as specified in [MS-ADDM], is present on the server.
+        /// </summary>
+        public bool HasActiveDirectoryWebService => CheckFlag(DS_FLAG.DS_WS_FLAG);
+        /// <summary>
+        /// The server is a writable domain controller (DC), not running Windows 2000 Server or Windows Server 2003.
+        /// </summary>
+        public bool IsWindows2003R2OrAbove => CheckFlag(DS_FLAG.DS_FULL_SECRET_DOMAIN_6_FLAG);
+        /// <summary>
+        /// The server is not running Windows 2000, Windows Server 2003, Windows Server 2008, or Windows Server 2008 R2.
+        /// </summary>
+        public bool IsWindows2008R2OrAbove => CheckFlag(DS_FLAG.DS_DS_8_FLAG);
+        /// <summary>
+        /// The server is not running Windows 2000, Windows Server 2003, Windows Server 2008, Windows Server 2008 R2, or Windows Server 2012.
+        /// </summary>
+        public bool IsWindows2012R2OrAbove => CheckFlag(DS_FLAG.DS_DS_9_FLAG);
+        /// <summary>
+        /// The server has a DNS name.
+        /// </summary>
+        public bool HasDnsName => CheckFlag(DS_FLAG.DS_DNS_CONTROLLER_FLAG);
+        /// <summary>
+        /// The naming context is a default naming context.
+        /// </summary>
+        public bool IsDefaultNamingContext => CheckFlag(DS_FLAG.DS_DNS_DOMAIN_FLAG);
+        /// <summary>
+        /// The naming context is the forest root
+        /// </summary>
+        public bool IsForestNamingContext => CheckFlag(DS_FLAG.DS_DNS_FOREST_FLAG);
 
         private bool CheckFlag(DS_FLAG dsFlag)
         {
             return (_flags & (uint)dsFlag) != 0;
         }
-        // The server holds the PDC FSMO role (PdcEmulationMasterRole).
-        public bool IsPrimaryDomainController => CheckFlag(DS_FLAG.DS_PDC_FLAG);
-        // The server is a GC server and will accept and process GC messages.
-        public bool IsGlobalCatalog => CheckFlag(DS_FLAG.DS_GC_FLAG);
-        // The server is an LDAP server.
-        public bool IsLdapServer => CheckFlag(DS_FLAG.DS_LDAP_FLAG);
-        // The server is a DC.
-        public bool IsDomainController => CheckFlag(DS_FLAG.DS_DS_FLAG);
-        // The server is running the Kerberos Key Distribution Center service.
-        public bool IsKeyDistributionCenter => CheckFlag(DS_FLAG.DS_KDC_FLAG);
-        // The Win32 Time Service, as specified in [MS-W32T], is present on the server.
-        public bool IsTimeServer => CheckFlag(DS_FLAG.DS_TIMESERV_FLAG);
-        // The server is in the same site as the client.
-        public bool IsInClientSite => CheckFlag(DS_FLAG.DS_CLOSEST_FLAG);
-        // Indicates that the server is not an RODC.
-        public bool IsWritable => CheckFlag(DS_FLAG.DS_WRITABLE_FLAG);
-        // The server is a reliable time server.
-        public bool IsGoodTimeServer => CheckFlag(DS_FLAG.DS_GOOD_TIMESERV_FLAG);
-        public bool IsApplicationNamingContext => CheckFlag(DS_FLAG.DS_NDNC_FLAG);
-        // The server is an RODC.
-        public bool IsReadOnly => CheckFlag(DS_FLAG.DS_SELECT_SECRET_DOMAIN_6_FLAG);
-        // The Active Directory Web Service, as specified in [MS-ADDM], is present on the server.
-        public bool HasActiveDirectoryWebService => CheckFlag(DS_FLAG.DS_WS_FLAG);
-        // The server is a writable DC, not running Windows 2000 Server or Windows Server 2003.
-        public bool IsWindows2003R2OrAbove => CheckFlag(DS_FLAG.DS_FULL_SECRET_DOMAIN_6_FLAG);
-        // The server is not running Windows 2000, Windows Server 2003, Windows Server 2008, or Windows Server 2008 R2.
-        public bool IsWindows2008R2OrAbove => CheckFlag(DS_FLAG.DS_DS_8_FLAG);
-        // The server is not running Windows 2000, Windows Server 2003, Windows Server 2008, Windows Server 2008 R2, or Windows Server 2012.
-        public bool IsWindows2012R2OrAbove => CheckFlag(DS_FLAG.DS_DS_9_FLAG);
-        // The server has a DNS name.
-        public bool HasDnsName => CheckFlag(DS_FLAG.DS_DNS_CONTROLLER_FLAG);
-        // The NC is a default NC.
-        public bool IsDefaultNamingContext => CheckFlag(DS_FLAG.DS_DNS_DOMAIN_FLAG);
-        // The NC is the forest root
-        public bool IsForestNamingContext => CheckFlag(DS_FLAG.DS_DNS_FOREST_FLAG);
     }
 }
