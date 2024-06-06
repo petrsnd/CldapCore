@@ -16,7 +16,7 @@
     </Description>
     <PackageProjectUrl>https://github.com/petrsnd/CldapCore</PackageProjectUrl>
     <RepositoryUrl>https://github.com/petrsnd/CldapCore</RepositoryUrl>
-    <!--<PackageIcon>Content\images\CLDAP.png</PackageIcon>-->
+    <PackageIcon>Content\images\CLDAP.png</PackageIcon>
     <PackageTags>cldap;active-directory;csharp;netstandard;dotnet-standard</PackageTags>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
@@ -28,6 +28,17 @@
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <RootNamespace>Petrsnd.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\CLDAP.png" Link="OTP.png" Pack="true" PackagePath="Content\images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">

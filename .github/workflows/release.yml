@@ -1,10 +1,11 @@
-name: PR validation CldapCore
+name: Release CldapCore
+
 on:
-  pull_request:
+  push:
     branches:
       - main
-      - releases/**
+      - release/**
 
-jobs:
+ jobs:
   call-workflow:
     uses: petrsnd/CldapCore/.github/workflows/build.yml@v1

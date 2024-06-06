@@ -1,19 +1,12 @@
-name: Package and publish
+name: Build and Package
 
 on:
-  push:
-    branches:
-      - main
-      - release-*
-  workflow_dispatch:
+  workflow_call:
 
 jobs:
-  build:
+  build_and_package_cldapcore:
   
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        dotnet-version: ['8.0.x']
 
     steps:
       - uses: actions/checkout@v4
@@ -21,7 +14,38 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
+
       - name: Install dependencies
         run: dotnet restore
       - name: Build
-        run: dotnet build  
+        run: dotnet build
+
+      - name: Run tests
+        run: dotnet test
+
+      - name: Build library
+        run: dotnet publish CldapCore\CldapCore.csproj
+      - name: Build tools (win-x64)
+        run: dotnet publish CldapTool\CldapTool.csproj -r win-x64
+      - name: Build tools (linux-x64)
+        run: dotnet publish CldapTool\CldapTool.csproj -r linux-x64
+
+      - name: Package library
+        run: dotnet pack CldapCore\CldapCore.csproj
+
+      - name: Archive artifacts (nuget)
+        uses: actions/upload-artifact@v4
+        with:
+          path: CldapCore/bin/Release/CldapCore.*.nupkg
+      - name: Archive artifacts (nuget symbols)
+        uses: actions/upload-artifact@v4
+        with:
+          path: CldapCore/bin/Release/CldapCore.*.snupkg
+      - name: Archive artifacts (tool win-x64)
+        uses: actions/upload-artifact@v4
+        with:
+          path: CldapTool/bin/Release/net8.0/win-x64/CldapTool.exe
+      - name: Archive artifacts (tool linux-x64)
+        uses: actions/upload-artifact@v4
+        with:
+          path: CldapTool/bin/Release/net8.0/linux-x64/CldapTool
