@@ -11,8 +11,9 @@
     <Company>petrsnd</Company>
     <Copyright>(c) 2024 Daniel F. Peterson (petrsnd@gmail.com)</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <Description>
-      TODO
+      CLDAP library for pinging Active Directory domain controllers to return capabilities and site information.
     </Description>
     <PackageProjectUrl>https://github.com/petrsnd/CldapCore</PackageProjectUrl>
     <RepositoryUrl>https://github.com/petrsnd/CldapCore</RepositoryUrl>
@@ -23,7 +24,7 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageReleaseNotes>
-      TODO
+      .NET Standard 2.0 library implementing Microsoft CLDAP ping request and decoding the response.
     </PackageReleaseNotes>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <RootNamespace>Petrsnd.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
@@ -35,6 +36,10 @@
 
   <ItemGroup>
     <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
