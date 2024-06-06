@@ -209,7 +209,7 @@ namespace Petrsnd.CldapCore
             }
             catch
             {
-                return default(T);
+                return default;
             }
             finally
             {
@@ -275,22 +275,12 @@ namespace Petrsnd.CldapCore
             return strings.ToArray();
         }
 
-        /// <summary>
-        /// GUID reprentation as a struct.
-        /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         private struct GUID
         {
-            /// <summary />
             public int A;
-
-            /// <summary />
             public short B;
-
-            /// <summary />
             public short C;
-
-            /// <summary />
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
             public byte[] D;
         }
@@ -298,24 +288,9 @@ namespace Petrsnd.CldapCore
         [StructLayout(LayoutKind.Sequential)]
         private struct NETLOGON_SAM_LOGON_RESPONSE_EX_HEADER
         {
-            /// <summary>
-            /// OpCode for response.
-            /// </summary>
             public Opcode Opcode;
-
-            /// <summary>
-            /// Size.
-            /// </summary>
             public ushort Sbz;
-
-            /// <summary>
-            /// DS_FLAG bit field.
-            /// </summary>
             public uint Flags;
-
-            /// <summary>
-            /// The GUID of the domain.
-            /// </summary>
             public GUID DomainGuid;
         }
 
@@ -336,15 +311,8 @@ namespace Petrsnd.CldapCore
         [StructLayout(LayoutKind.Sequential)]
         private struct NETLOGON_SAM_LOGON_RESPONSE_EX_FOOTER
         {
-            /// <summary>
-            /// Version of the server.
-            /// </summary>
             public uint NtVersion;
-
-            /// <summary />
             public ushort LmNtToken;
-
-            /// <summary />
             public ushort Lm20Token;
         }
     }

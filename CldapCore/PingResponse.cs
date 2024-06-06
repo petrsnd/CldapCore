@@ -23,7 +23,7 @@ namespace Petrsnd.CldapCore
         /// <exception cref="CldapException">Errors in the response encoding.</exception>
         internal PingResponse(Guid domainGuid, uint flags, string[] strings)
         {
-            this._flags = flags;
+            _flags = flags;
             DomainGuid = domainGuid;
             if (strings.Length < 8)
             {
