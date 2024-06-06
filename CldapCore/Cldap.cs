@@ -61,6 +61,11 @@ namespace Petrsnd.CldapCore
 
         private static byte[] GetCldapPingRequest(string dnsName)
         {
+            if (dnsName is null)
+            {
+                dnsName = string.Empty;
+            }
+
             // BerConverter encoding format string
             // https://learn.microsoft.com/en-us/dotnet/api/system.directoryservices.protocols.berconverter.encode?view=net-8.0#system-directoryservices-protocols-berconverter-encode(system-string-system-object())
             // Based on ber_printf function from (winber.h)

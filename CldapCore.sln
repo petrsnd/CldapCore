@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CldapTool", "CldapTool\CldapTool.csproj", "{A8F218DC-3093-4490-9451-D134209BBAEA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{859763E1-1B28-4B84-A1B7-65EEE386F04B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{859763E1-1B28-4B84-A1B7-65EEE386F04B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{859763E1-1B28-4B84-A1B7-65EEE386F04B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8F218DC-3093-4490-9451-D134209BBAEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8F218DC-3093-4490-9451-D134209BBAEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8F218DC-3093-4490-9451-D134209BBAEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8F218DC-3093-4490-9451-D134209BBAEA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

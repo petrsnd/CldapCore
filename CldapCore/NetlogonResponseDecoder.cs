@@ -232,8 +232,9 @@ namespace Petrsnd.CldapCore
                     str = null;
                     labels.Add(startIndex, null);
                 }
-                else if ((buf[startIndex] & 0xc0) == 0xc0) // 1100 0000, Bit-8 and Bit-7 set means pointer
+                else if ((buf[startIndex] & 0xc0) == 0xc0)
                 {
+                    // 1100 0000, Bit-8 and Bit-7 set means pointer
                     if (startIndex + 1 >= endIndex)
                     {
                         throw new CldapException("Bad encoding of RFC 1035 string pointer");
@@ -295,17 +296,17 @@ namespace Petrsnd.CldapCore
         }
 
         /* RFC 1035 compressed strings go between header and footer
-        // See RFC 1035 4.1.4
-        // See [MS-ADTS] 6.3.7
-        //  DnsForestName
-        //  DnsDomainName
-        //  DnsHostName
-        //  NetbiosDomainName
-        //  ComputerName
-        //  UserName
-        //  DcSiteName
-        //  ClientSiteName
-        //  NextClosestSiteName (Included only if NETLOGON_NT_VERSION_WITH_CLOSEST_SITE is used) */
+           See RFC 1035 4.1.4
+           See [MS-ADTS] 6.3.7
+            DnsForestName
+            DnsDomainName
+            DnsHostName
+            NetbiosDomainName
+            ComputerName
+            UserName
+            DcSiteName
+            ClientSiteName
+            NextClosestSiteName (Included only if NETLOGON_NT_VERSION_WITH_CLOSEST_SITE is used) */
 
         /// <summary />
         [StructLayout(LayoutKind.Sequential)]
