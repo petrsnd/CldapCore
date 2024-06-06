@@ -13,8 +13,8 @@ namespace CldapTool
         {
             try
             {
-                var ipAddress = IPAddress.Parse(opts.IpAddress!);
-                var response = Cldap.Ping(opts.DnsName, ipAddress, opts.Port);
+                var ipAddress = IPAddress.Parse(opts.Server!);
+                var response = Cldap.Ping(ipAddress, null, opts.Port);
                 Console.WriteLine(response);
             }
             catch (Exception ex)

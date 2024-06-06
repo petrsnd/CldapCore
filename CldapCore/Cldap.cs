@@ -17,13 +17,23 @@ namespace Petrsnd.CldapCore
         /// <summary>
         /// Send CLDAP ping request to a target server.
         /// </summary>
-        /// <param name="dnsName">DNS name of a naming context.</param>
         /// <param name="ipAddress">IP Address to send CLDAP request to.</param>
+        /// <param name="dnsName">DNS name of a naming context. (Default: null).</param>
         /// <param name="port">Which UDP port to send CLDAP request to. (Default: 389).</param>
         /// <returns>A CLDAP ping response object.</returns>
         /// <exception cref="CldapException">Any failure with CLDAP communication or response parsing.</exception>
-        public static PingResponse Ping(string dnsName, IPAddress ipAddress, int port = 389)
+        public static PingResponse Ping(IPAddress ipAddress, string dnsName = null, int port = 389)
         {
+            if (ipAddress is null)
+            {
+                throw new CldapException("Null IP address specified.");
+            }
+
+            if (ipAddress.AddressFamily != AddressFamily.InterNetwork && ipAddress.AddressFamily != AddressFamily.InterNetworkV6)
+            {
+                throw new CldapException("Only IPv4 and IPv6 addresses are supported");
+            }
+
             var cldapPing = GetCldapPingRequest(dnsName);
             using (var udpClient = new UdpClient())
             {
@@ -61,9 +71,9 @@ namespace Petrsnd.CldapCore
 
         private static byte[] GetCldapPingRequest(string dnsName)
         {
-            if (dnsName is null)
+            if (string.IsNullOrEmpty(dnsName))
             {
-                dnsName = string.Empty;
+                dnsName = "NONE";
             }
 
             // BerConverter encoding format string
