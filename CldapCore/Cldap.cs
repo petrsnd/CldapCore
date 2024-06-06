@@ -1,17 +1,73 @@
-﻿namespace Petrsnd.CldapCore
+﻿// <copyright file="Cldap.cs" company="petrsnd">
+// (c) 2024 Daniel F. Peterson (petrsnd@gmail.com)
+// </copyright>
+namespace Petrsnd.CldapCore
 {
     using System;
     using System.DirectoryServices.Protocols;
-    using System.Net.Sockets;
     using System.Net;
+    using System.Net.Sockets;
     using System.Text;
 
+    /// <summary>
+    /// This static class provides static methods for sending CLDAP requests.
+    /// </summary>
     public static class Cldap
     {
+        /// <summary>
+        /// Send CLDAP ping request to a target server.
+        /// </summary>
+        /// <param name="dnsName">DNS name of a naming context.</param>
+        /// <param name="ipAddress">IP Address to send CLDAP request to.</param>
+        /// <param name="port">Which UDP port to send CLDAP request to. (Default: 389).</param>
+        /// <returns>A CLDAP ping response object.</returns>
+        /// <exception cref="CldapException">Any failure with CLDAP communication or response parsing.</exception>
+        public static PingResponse Ping(string dnsName, IPAddress ipAddress, int port = 389)
+        {
+            var cldapPing = GetCldapPingRequest(dnsName);
+            using (var udpClient = new UdpClient())
+            {
+                object[] objs;
+                try
+                {
+                    udpClient.Connect(ipAddress, port);
+                    var bytesSent = udpClient.Send(cldapPing, cldapPing.Length);
+                    if (bytesSent < cldapPing.Length)
+                    {
+                        throw new CldapException($"Unable to send entire CLDAP ping request, size={cldapPing.Length}");
+                    }
+
+                    var remoteIpEndPoint = new IPEndPoint(ipAddress, 0);
+                    udpClient.Client.ReceiveTimeout = 10000; // 10 sec
+                    var buf = udpClient.Receive(ref remoteIpEndPoint);
+
+                    // This method is based on ber_scanf from winber.h
+                    // https://learn.microsoft.com/en-us/windows/win32/api/winber/nf-winber-ber_printf?redirectedfrom=MSDN
+                    objs = BerConverter.Decode("{x{x{{x[O]}}}", buf);
+                }
+                catch (Exception ex)
+                {
+                    throw new CldapException("Failed to receive and decode CLDAP ping response", ex);
+                }
+
+                if (objs == null || objs.Length < 1 || objs[0] == null)
+                {
+                    throw new CldapException("Decoded CLDAP ping response gave unexpected result");
+                }
+
+                return NetlogonResponseDecoder.Decode((byte[])objs[0]);
+            }
+        }
+
         private static byte[] GetCldapPingRequest(string dnsName)
         {
-            var buf = BerConverter.Encode("{it{oeeiibt{t{oo}t{oo}}{o}}}",
-                // CLDAPMessage
+            // BerConverter encoding format string
+            // https://learn.microsoft.com/en-us/dotnet/api/system.directoryservices.protocols.berconverter.encode?view=net-8.0#system-directoryservices-protocols-berconverter-encode(system-string-system-object())
+            // Based on ber_printf function from (winber.h)
+            // https://learn.microsoft.com/en-us/windows/win32/api/winber/nf-winber-ber_printf?redirectedfrom=MSDN
+            // CLDAPMessage
+            var buf = BerConverter.Encode(
+                "{it{oeeiibt{t{oo}t{oo}}{o}}}", // Encoding format
                 1, // Message ID
                 0x63, // TAG: protocolOp (Application 3: SearchRequest)
                 new byte[] { }, // SearchBase (null LDAP string)
@@ -27,36 +83,8 @@
                 0xa3, // TAG filter (3: EQUALITY Filter)
                 Encoding.ASCII.GetBytes("NtVer"), // attributeDesc (Octet String)
                 new byte[] { 0x06, 0x00, 0x00, 0x00 }, // assertionValue (Octet String: DWORD=6 encoded backwards)
-                                                       // attributes, encoded as SEQUENCE
-                Encoding.ASCII.GetBytes("Netlogon")); // attributeSelector (Octet String)
+                Encoding.ASCII.GetBytes("Netlogon")); // attributes encoded as SEQUENCE [attributeSelector (Octet String)]
             return buf;
-        }
-
-        public static PingResponse Ping(string dnsName, IPAddress ipAddress, int port)
-        {
-            var cldapPing = GetCldapPingRequest(dnsName);
-            using (var udpClient = new UdpClient())
-            {
-                object[] objs;
-                try
-                {
-                    udpClient.Connect(ipAddress, port);
-                    udpClient.Send(cldapPing, cldapPing.Length);
-                    var remoteIpEndPoint = new IPEndPoint(ipAddress, 0);
-                    udpClient.Client.ReceiveTimeout = 10000; // 10 sec
-                    var buf = udpClient.Receive(ref remoteIpEndPoint);
-                    objs = BerConverter.Decode("{x{x{{x[O]}}}", buf);
-                }
-                catch (Exception ex)
-                {
-                    throw new CldapException("Failed to receive and decode CLDAP ping response", ex);
-                }
-                if (objs == null || objs.Length < 1 || objs[0] == null)
-                {
-                    throw new CldapException("Decoded CLDAP ping response gave unexpected result");
-                }
-                return NetlogonResponseDecoder.Decode((byte[])objs[0]);
-            }
         }
     }
 }
