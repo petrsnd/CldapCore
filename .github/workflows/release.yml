@@ -4,8 +4,9 @@ on:
   push:
     branches:
       - main
-      - release/**
+      - releases/**
+  workflow_dispatch:
 
  jobs:
   call-workflow:
-    uses: petrsnd/CldapCore/.github/workflows/build.yml@v1
+    uses: ./build.yml
