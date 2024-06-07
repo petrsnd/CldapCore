@@ -7,4 +7,5 @@ on:
 
 jobs:
   call-workflow:
+    name: Build and package CldapCore
     uses:  ./.github/workflows/build.yml
