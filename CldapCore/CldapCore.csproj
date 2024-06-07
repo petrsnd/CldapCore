@@ -11,23 +11,39 @@
     <Company>petrsnd</Company>
     <Copyright>(c) 2024 Daniel F. Peterson (petrsnd@gmail.com)</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <Description>
-      TODO
+      CLDAP library for pinging Active Directory domain controllers to return capabilities and site information.
     </Description>
     <PackageProjectUrl>https://github.com/petrsnd/CldapCore</PackageProjectUrl>
     <RepositoryUrl>https://github.com/petrsnd/CldapCore</RepositoryUrl>
-    <!--<PackageIcon>Content\images\CLDAP.png</PackageIcon>-->
+    <PackageIcon>Content\images\CLDAP.png</PackageIcon>
     <PackageTags>cldap;active-directory;csharp;netstandard;dotnet-standard</PackageTags>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageReleaseNotes>
-      TODO
+      .NET Standard 2.0 library implementing Microsoft CLDAP ping request and decoding the response.
     </PackageReleaseNotes>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <RootNamespace>Petrsnd.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\CLDAP.png" Link="CLDAP.png" Pack="true" PackagePath="Content\images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
