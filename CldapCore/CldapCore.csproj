@@ -31,7 +31,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\CLDAP.png" Link="OTP.png" Pack="true" PackagePath="Content\images\" />
+    <None Include="..\CLDAP.png" Link="CLDAP.png" Pack="true" PackagePath="Content\images\" />
   </ItemGroup>
 
   <ItemGroup>
