@@ -9,4 +9,4 @@ on:
 
  jobs:
   call-workflow:
-    uses: ./build.yml
+    uses: ./build.yml@v1
