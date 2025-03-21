@@ -1,4 +1,4 @@
-name: PR validation
+name: PR validation CldapCore
 on:
   pull_request:
     branches:
@@ -6,22 +6,6 @@ on:
       - releases/**
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        dotnet-version: ['8.0.x']
-
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup dotnet ${{ matrix.dotnet-version }}
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: ${{ matrix.dotnet-version }}
-      - name: Install dependencies
-        run: dotnet restore
-      - name: Build
-        run: dotnet build
-      - name: Run tests
-        run: dotnet test
+  call-workflow:
+    name: Build and package CldapCore
+    uses:  ./.github/workflows/build.yml
